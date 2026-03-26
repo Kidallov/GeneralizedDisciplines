@@ -62,3 +62,35 @@ Iroot@myfirstserver:~# curl http://kdlv.duckdns.org
 ```
 
 curl автоматически не перенаправляет на https стандарт, такое делает сайт.
+
+5. Теперь сделаем через `curl` запрос к https и получим:
+
+```
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome!</title>
+<style>
+    body {
+        width: 35em;
+        margin: 0 auto;
+        font-family::q Tahoma, Verdana, Arial, sans-serif;
+    }
+</style>
+</head>
+<body>
+<h1>Welcome to Aleksandr's site!</h1>
+<p>Kidalov Aleksandr.</p>
+
+<p>For online documentation and support please refer to</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+```
+
+
+И также приложу скриншот, в котором показано **доказательство**, что мой сайт работает с https протоколом:
+
+<img width="615" height="721" alt="Снимок экрана 2026-03-26 в 14 51 12" src="https://github.com/user-attachments/assets/d1e64095-0494-4e70-bd04-204b22db758a" />
+
