@@ -48,7 +48,7 @@ If you like Certbot, please consider supporting our work by:
 * Donating to EFF https://eff.org/donate-le
 ```
 
-4. Можем проверить curl теперь http
+4. Можем сделать к http сайту через curl
 
 ```
 Iroot@myfirstserver:~# curl http://kdlv.duckdns.org
