@@ -182,3 +182,133 @@
 2.	Разбейте задачу на этапы (подзадачи) в соответствии с выбранной методологий
 3.	Выберите и обоснуйте для каждого этапа необходимые методы 
 4.	Реализуйте проект (код и краткая документация)
+
+
+Для успешного закрытия третьего этапа нам нужно структурировать твой опыт разработки сайта на Django в соответствии с академическими требованиями (методология, обоснование, этапы).
+
+Ниже представлен готовый вариант отчета для твоего мини-проекта.
+
+---
+
+## Решение на Этап 3. Мини-проект: Веб-платформа для публикации статей на Django.
+
+### 1. Выбор методологии и обоснование
+Для реализации данного проекта была выбрана методология **Agile (Scrum)**.
+* **Обоснование:** Разработка веб-приложений требует гибкости. Agile позволяет быстро создать минимально жизнеспособный продукт (MVP) — в данном случае форму создания статьи и страницу её отображения — а затем итеративно добавлять функции (авторизацию, теги, стилизацию), тестируя каждую часть отдельно.
+
+### 2. Этапы разработки (в соответствии с Agile)
+Проект был разделен на три основных спринта:
+1.  **Спринт 1 (Backend Core):** Проектирование схемы данных и настройка административной панели.
+2.  **Спринт 2 (User Interface):** Создание шаблонов для отображения списка статей и детальной страницы.
+3.  **Спринт 3 (Interactivity):** Реализация CRUD-функционала (Create, Read, Update, Delete) через Django Forms.
+
+---
+
+### 3. Выбор и обоснование методов для каждого этапа
+
+| Этап | Метод / Инструмент | Обоснование |
+| :--- | :--- | :--- |
+| **Проектирование БД** | **ORM (Object-Relational Mapping)** | Позволяет описывать структуру статьи на языке Python, не прописывая SQL-запросы вручную, что ускоряет разработку. |
+| **Разработка логики** | **Паттерн MVT (Model-View-Template)** | Стандарт архитектуры Django, обеспечивающий четкое разделение данных, логики и визуального представления. |
+| **Интерфейс** | **Шаблонизатор Django (Jinja2-style)** | Позволяет динамически подставлять данные из базы в HTML-код. |
+| **Тестирование** | **Ручное функциональное тестирование** | Проверка корректности сохранения данных через формы и их отображения в браузере. |
+
+---
+
+### 4. Реализация проекта
+
+#### Краткая документация (Структура)
+* **Model:** Класс `Articles` с полями `title` (заголовок), `anons` (анонс статьи), `full_text` (полный текст статьи), `date` (дата).
+* **View:** Функции-контроллеры для обработки GET (просмотр) и POST (сохранение) запросов.
+* **Template:** Базовый шаблон с использованием Bootstrap для адаптивности.
+
+#### Пример ключевого кода (`models.py` и `views.py`)
+
+```python
+# Приложение news файл models.py
+from django.db import models
+
+class Articles(models.Model):
+
+    # Создаем поля с нужными значениями
+    # Мы не создаем `id` - так как при миграции он создасться автоматически
+    title = models.CharField('Title', max_length=52)
+    anons = models.CharField('Anons', max_length=250)
+    full_text = models.TextField('Text')
+    date = models.DateTimeField('Date')
+
+    # Возвращаем заголовок статьи
+    def __str__(self):
+        return self.title
+
+    # получаем статью с ее id
+    def get_absolute_url(self):
+        return f'/news/{self.id}'
+
+    # Задаем django нужное имя нашего класса (вместо Articless видим Новости)
+    class Meta:
+        verbose_name = 'Новость'
+        verbose_name_plural = 'Новости'
+```
+
+```python
+# Приложение news файл views.py
+from django.shortcuts import render, redirect
+from .models import Articles
+from .forms import ArticlesForm
+from django.views.generic import DeleteView, UpdateView, DetailView
+
+# Функция, которая показывает нам статьи
+def news_home(request):
+    news = Articles.objects.order_by('-date')
+    return render(request, 'news/news_home.html', {'news': news})
+
+# Детали новости
+class NewsDetailView(DeleteView):
+    model = Articles
+    template_name = 'news/details_view.html'
+    context_object_name = 'article'
+
+# Обновление новости
+class NewsUpdateView(UpdateView):
+    model = Articles
+    template_name = 'news/create.html' # показывается страница создании статьи, чтобы не создавать новую страницу
+
+    form_class = ArticlesForm # Берем те же формы, что использовали при создании
+
+# Удалении новости
+class NewsDeleteView(DeleteView):
+    model = Articles
+    success_url = '/news/' # Перекидываем пользователя после успешного удаления
+    template_name = 'news/news-delete.html'
+
+# Функция создания новости
+def create(request):
+
+    error = ''
+
+    # Обработка POST-запроса
+    if request.method == 'POST':
+        form = ArticlesForm(request.POST)
+
+        # Проверяем, что поля валидно заполнены
+        if form.is_valid(): 
+            form.save()
+            return redirect('home')
+        else:
+            error = 'Форма была неверной'
+
+    form = ArticlesForm()
+
+    data = {
+        'form': form,
+        'error': error
+    }
+
+    return render(request, 'news/create.html', data)
+```
+
+---
+
+### Заключение
+Использование фреймворка Django в связке с методологией Agile позволило в краткие сроки реализовать масштабируемое веб-приложение. Выбранные методы (ORM, MVT) минимизировали количество ошибок при работе с данными и обеспечили логическую чистоту кода.
