@@ -19,25 +19,29 @@ def bubble_sort(arr):
 
     return arr
 
-
+# Быстрая сортировка
 def quick_sort(arr):
 
+    # Проверка на размер
     if len(arr) <= 1: 
         return arr
 
+    # Создаем пивот, случайно выбранное значение, с которым будем сравнивать
     pivot = random.choice(arr)
-        
-    left = [i for i in arr if i < pivot]
-    middle = [i for i in arr if i == pivot]
-    right = [i for i in arr if i > pivot]
-
-    return quick_sort(left) + middle + quick_sort(right)
     
+    # Создаем массивы, куда будем расклыдвать элементы относительно pivot
+    right, left, middle = [], [], []
+    
+    for i in range(len(arr)):
 
+        if pivot < arr[i]:
+            right.append(arr[i])
+        
+        elif pivot > arr[i]:
+            left.append(arr[i])
 
-# Случайный массив длиной в 10 ^ 8
-#arr = np.random.rand(10**8)
-arr = [3,14,1,7,9,8,11,6,4,2]
+        else:
+            middle.append(arr[i])
 
-print(bubble_sort(arr))
-print(quick_sort(arr))
+    # Объединяем наши списки
+    return quick_sort(left) + middle + quick_sort(right) 
