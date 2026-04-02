@@ -53,5 +53,5 @@ server {
 ```
 
 Можно проверить обоих сайтов по ссылкам:
-* [Основной сайт](kdlv.duckdns.org)
+* [Основной сайт](https://kdlv.duckdns.org)
 * [Мини-портфолио](https://mypoortf.duckdns.org)
