@@ -1,0 +1,50 @@
+class Settings:
+    """Store all static and dynamic settings for Alien Invasion."""
+
+    def __init__(self):
+        self.screen_width = 960
+        self.screen_height = 640
+        self.bg_color = (8, 11, 24)
+        self.fps = 60
+
+        self.ship_limit = 3
+
+        self.bullet_width = 5
+        self.bullet_height = 18
+        self.bullet_color = (255, 211, 105)
+        self.bullets_allowed = 5
+        self.power_bullet_width = 11
+        self.power_bullet_hits = 3
+
+        self.fleet_drop_speed = 14
+        self.bonus_width = 30
+        self.bonus_height = 30
+        self.bonus_speed = 2.1
+        self.bonus_drop_chance = 0.18
+        self.shield_duration = 7000
+        self.power_duration = 8000
+        self.status_message_duration = 1800
+
+        self.speedup_scale = 1.12
+        self.score_scale = 1.5
+        self.save_file = "savefile.pkl"
+
+        self.initialize_dynamic_settings()
+
+    def initialize_dynamic_settings(self):
+        self.ship_speed = 4.2
+        self.bullet_speed = 7.0
+        self.alien_speed = 1.0
+        self.fleet_direction = 1
+        self.alien_points = 50
+
+    def increase_speed(self):
+        self.ship_speed *= self.speedup_scale
+        self.bullet_speed *= self.speedup_scale
+        self.alien_speed *= self.speedup_scale
+        self.alien_points = int(self.alien_points * self.score_scale)
+
+    def apply_level(self, level):
+        self.initialize_dynamic_settings()
+        for _ in range(max(1, level) - 1):
+            self.increase_speed()
