@@ -9,12 +9,6 @@ python3 -m pip install -r requirements.txt
 python3 alien_invasion.py
 ```
 
-В этой папке уже создано локальное окружение `.venv` с установленным `pygame`, поэтому можно запустить сразу так:
-
-```bash
-.venv/bin/python alien_invasion.py
-```
-
 ## Управление
 
 - Стрелки влево/вправо - движение корабля.
