@@ -1,0 +1,25 @@
+@startuml
+!include style.iuml
+hide footbox
+autonumber
+actor "Ребёнок" as Child
+participant "Приложение" as App
+participant "Сеанс\nReadingSession" as Session
+participant "Распознаватель\nRecognizer" as ASR
+actor "Педагог" as Teacher
+Child -> App : Закончить чтение
+App -> Session : Сохранить ссылку и длительность записи\nПеревести в RECOGNIZING
+App -> ASR : transcribe(audio_ref)
+alt распознавание успешно
+  ASR --> App : Черновая расшифровка
+  App -> Session : Сохранить черновик, перейти в REVIEW
+  App -> Teacher : Предъявить запись и расшифровку
+  Teacher -> App : Подтвердить услышанный текст\nс учётом исправлений
+  App -> Session : Сохранить проверенный текст,\nперейти в QUESTIONS
+  App -> Child : Показать вопросы
+else сбой распознавания
+  ASR --> App : Ошибка
+  App -> Session : Вернуть в RECORDING
+  App -> Child : Предложить повторную запись
+end
+@enduml

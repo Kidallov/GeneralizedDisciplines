@@ -1,0 +1,53 @@
+@startuml
+!include style.iuml
+skinparam nodesep 85
+hide empty methods
+hide empty fields
+class ReadingSession {
+  +child_id: str
+  +task: ReadingTask
+  +phase: Phase
+  +audio_ref: str | None
+  +seconds: float
+  +transcript: str | None
+  +answers: list[int]
+  +result: Assessment | None
+}
+class ReadingTask {
+  +text: str
+  +questions: list[Question]
+}
+class Question {
+  +prompt: str
+  +options: list[str]
+  +key: int
+}
+class Assessment {
+  +word_edits: int
+  +reference_words: int
+  +words_per_minute: float
+  +correct: int
+  +total: int
+}
+enum Phase {
+  ASSIGNED
+  RECORDING
+  RECOGNIZING
+  REVIEW
+  QUESTIONS
+  COMPLETED
+}
+interface Recognizer {
+  +transcribe(audio_ref: str): str
+}
+interface Scorer {
+  +evaluate(session: ReadingSession): Assessment
+}
+ReadingSession "*" --> "1" ReadingTask : task
+ReadingTask "1" *-right- "1..*" Question
+ReadingSession "1" *-- "0..1" Assessment : result
+ReadingSession ..> Phase
+Scorer ..> ReadingSession
+Scorer ..> Assessment
+Recognizer -[hidden]right- Scorer
+@enduml

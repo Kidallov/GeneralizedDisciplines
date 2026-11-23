@@ -1,0 +1,22 @@
+@startuml
+!include style.iuml
+left to right direction
+actor "Педагог" as Teacher
+actor "Ребёнок" as Child
+rectangle "Система оценки чтения" {
+  usecase "Назначить текст\nи вопросы" as Assign
+  usecase "Сверить расшифровку\nс записью" as Review
+  usecase "Исправить расшифровку" as Correct
+  usecase "Посмотреть отчёт" as View
+  usecase "Прочитать текст\nвслух" as Read
+  usecase "Записать чтение" as Record
+  usecase "Ответить на вопросы" as Answer
+}
+Teacher -- Assign
+Teacher -- Review
+Teacher -- View
+Child -- Read
+Child -- Answer
+Read ..> Record : <<include>>
+Correct .up.> Review : <<extend>>\n[есть ошибка распознавания]
+@enduml

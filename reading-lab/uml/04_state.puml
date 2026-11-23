@@ -1,0 +1,17 @@
+@startuml
+!include style.iuml
+state "Задание назначено\nASSIGNED" as Assigned
+state "Идёт запись\nRECORDING" as Recording
+state "Речь распознаётся\nRECOGNIZING" as Recognizing
+state "Педагог сверяет текст\nREVIEW" as Review
+state "Ребёнок отвечает\nQUESTIONS" as Questions
+state "Занятие завершено\nCOMPLETED" as Done
+[*] --> Assigned
+Assigned --> Recording : начать чтение
+Recording -right-> Recognizing : передать запись
+Recognizing --> Review : получить расшифровку
+Recording <-left- Recognizing : сбой / запросить\nновую запись
+Review --> Questions : утвердить текст
+Questions -right-> Done : отправить ответы\n[все даны] / рассчитать итог
+Done --> [*]
+@enduml
